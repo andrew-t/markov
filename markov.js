@@ -11,27 +11,28 @@ function Markov(order) {
 		chain = {};
 	this.train = function(text) {
 		var split = new Split(text),
-			first = true;
-		for (var start = 0; start < order; ++start) {
-			var keyShelf = new Shelf(order),
-				prevShelf = new Shelf(1);
-			split.reset().skip(start).each(function(word) {
-				keyShelf.push(word);
-				if (first && keyShelf.isFull) {
-					first = false;
-					starters.push(keyShelf.members.join(''))
-				}
-				var key = toKey(keyShelf.members);
-				chain[key] = new Picker();
-				addToPrev(key, word);
-			});
-			addToPrev();
-
-			function addToPrev(key, word) {
-				var prev = prevShelf.push(key);
-				if (prev)
-					chain[prev].push(word || noWord);
+			first = true,
+			keyShelf = new Shelf(order),
+			prevShelf = new Shelf(1);
+		split.reset().each(function(word) {
+			keyShelf.push(word);
+			if (first && keyShelf.isFull) {
+				first = false;
+				starters.push(keyShelf.members
+					.map(function(x) { return x.trim(); })
+					.join(' '))
 			}
+			var key = toKey(keyShelf.members);
+			if (!chain[key])
+				chain[key] = new Picker();
+			addToPrev(key, word);
+		});
+		addToPrev();
+
+		function addToPrev(key, word) {
+			var prev = prevShelf.push(key);
+			if (prev)
+				chain[prev].push(word ? word.trim() : noWord);
 		}
 	};
 
@@ -45,9 +46,9 @@ function Markov(order) {
 		var shelf = new Shelf(order),
 			force = [];
 		new Split(key).each(function(word) {
-			var f = shelf.push(word);
+			var f = shelf.push(word.trim());
 			if (f)
-				force.push(f);
+				force.push(f.trim());
 		});
 		return {
 			next: function() {
@@ -73,10 +74,10 @@ Markov.prototype.ramble = function(start, maxLength) {
 	while (--maxLength) {
 		var next = iterator.next();
 		if (next)
-			out += next;
+			out += next + ' ';
 		else break;
 	}
-	return out;
+	return out.trim();
 };
 
 function toKey(words) {
