@@ -65,6 +65,20 @@ function Markov(order) {
 	Object.defineProperty(this, 'order', { get: function () { return order; } });
 };
 
+Markov.prototype.ramble = function(start, maxLength) {
+	var out = '',
+		iterator = this.iterate(start);
+	if (!maxLength)
+		maxLength = Infinity;
+	while (--maxLength) {
+		var next = iterator.next();
+		if (next)
+			out += next;
+		else break;
+	}
+	return out;
+};
+
 function toKey(words) {
 	return (words instanceof Array
 			? words

@@ -22,6 +22,11 @@ describe('Markov', function() {
 		expect(i.next(), 'test.');
 		expect(i.next(), undefined);
 	});
+	it('should ramble.', function() {
+		var m = new Markov(1);
+		m.train('This is a test.');
+		expect(m.ramble(), 'This is a test.');
+	});
 });
 
 function demand(tr, msg) {
