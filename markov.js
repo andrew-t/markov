@@ -1,19 +1,78 @@
 var util = require('./util'),
-	Split = require('./splitter');
+	Split = require('./splitter'),
+	Shelf = require('./shelf'),
+	deck = require('deck'),
+	noWord = '!';
 
 function Markov(order) {
 	if (!order)
 		order = 2;
-	var starters = [],
+	var starters = new Picker(),
 		chain = {};
 	this.train = function(text) {
-		for (var start = 0; start < order; ++start)
-			for (var i = start; i < words.length; ++words) {
-				
+		var split = new Split(text),
+			first = true;
+		for (var start = 0; start < order; ++start) {
+			var keyShelf = new Shelf(order),
+				prevShelf = new Shelf(1);
+			split.reset().skip(start).each(function(word) {
+				keyShelf.push(word);
+				if (first && keyShelf.isFull) {
+					first = false;
+					starters.push(keyShelf.members.join(''))
+				}
+				var key = Markov.toKey(keyShelf.members);
+				chain[key] = new Picker();
+				addToPrev(key, word);
+			});
+			addToPrev();
+
+			function addToPrev(key, word) {
+				var prev = prevShelf.push(key);
+				if (prev)
+					chain[prev].push(word || noWord);
 			}
+		}
 	};
 
-	Object.defineProperty(this, 'order', { get: function () { return order } });
+	this.has = function(key) {
+		return !!chain[Markov.toKey(key)];
+	};
+
+	this.iterate = function(key) {
+		if (!key)
+			key = starters.pick();
+		var shelf = new Shelf(order),
+			force = [];
+		new Split(key).each(function(word) {
+			var f = shelf.push(word);
+			if (f)
+				force.push(f);
+		});
+		return {
+			next: function() {
+				if (force.length)
+					return force.shift();
+				var current = chain[Markov.toKey(shelf.members.filter(function(x) {
+						return x;
+					}))],
+					next = shelf.push(current && current.pick());
+				return next == noWord ? undefined : next;
+			}
+		};
+	};
+
+	Object.defineProperty(this, 'order', { get: function () { return order; } });
+};
+
+function Picker() {
+	this.members = {};
+}
+Picker.prototype.push = function(key) {
+	this.members[key] = (this.members[key] || 0) + 1;
+};
+Picker.prototype.pick = function() {
+	return deck.pick(this.members);
 };
 
 Markov.toKey = function toKey(words) {
@@ -33,7 +92,7 @@ Markov.toKey = function toKey(words) {
 				})
 				.join('');
 		})
-		.join('');
+		.join(' ');
 }
 
 module.exports = Markov;

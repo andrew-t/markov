@@ -18,20 +18,28 @@ function Splitter(text) {
 	};
 	this.skip = function(n) {
 		while (n--) this.next();
+		return this;
 	};
 	this.reset = function() {
 		i = 0;
+		return this;
 	};
 	this.all = function() {
-		var oldI = i,
-			out = [],
-			next;
+		var all = [],
+			oldI = i;
 		i = 0;
-		while (next = this.next())
-			out.push(next);
+		this.each(function(next) {
+			all.push(next);
+		});
 		i = oldI;
-		return out;
-	}
+		return all;
+	};
+	this.each = function(c) {
+		var next,
+			n = 0;
+		while (next = this.next())
+			c(next, n++);
+	};
 }
 
 function not(c) {

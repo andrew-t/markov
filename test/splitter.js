@@ -50,6 +50,15 @@ describe('Splitter', function() {
 		expect(all[2], 'this?');
 		expect(s.next(), 'is ');
 	});
+	it('should iterate', function() {
+		var t = 'I like testing!',
+			s = new Split(t),
+			all = '';
+		s.each(function(x) {
+			all += x;
+		});
+		expect(all, t);
+	});
 });
 
 function expect(act, exp) {
