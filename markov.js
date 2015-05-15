@@ -1,7 +1,7 @@
 var util = require('./util'),
 	Split = require('./splitter'),
+	Picker = require('./picker'),
 	Shelf = require('./shelf'),
-	deck = require('deck'),
 	noWord = '!';
 
 function Markov(order) {
@@ -63,16 +63,6 @@ function Markov(order) {
 	};
 
 	Object.defineProperty(this, 'order', { get: function () { return order; } });
-};
-
-function Picker() {
-	this.members = {};
-}
-Picker.prototype.push = function(key) {
-	this.members[key] = (this.members[key] || 0) + 1;
-};
-Picker.prototype.pick = function() {
-	return deck.pick(this.members);
 };
 
 Markov.toKey = function toKey(words) {
