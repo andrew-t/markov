@@ -11,7 +11,7 @@ function Splitter(text) {
 		takeWhile(function(x) {
 			if (isNumber && /[.,]/.test(x))
 				return true;
-			if (isNumber == undefined)
+			if (isNumber == undefined && !/[$£€]/.test(x))
 				isNumber = /\d/.test(x);
 			return !util.isSplitter(x);
 		});

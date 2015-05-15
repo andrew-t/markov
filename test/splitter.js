@@ -73,6 +73,12 @@ describe('Splitter', function() {
 		expect(s.next(), 'years ');
 		expect(s.next(), 'old.');
 	});
+	it('should handle money.', function() {
+		var s = new Split('I have £2.50.');
+		expect(s.next(), 'I ');
+		expect(s.next(), 'have ');
+		expect(s.next(), '£2.50.');
+	});
 });
 
 function expect(act, exp) {
