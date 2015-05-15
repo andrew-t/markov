@@ -5,11 +5,6 @@ describe('Markov', function() {
 		expect(new Markov(1).order, 1);
 		expect(new Markov().order, 2);
 	});
-	it('should create keys.', function() {
-		expect(Markov.toKey('Test '), 'test');
-		expect(Markov.toKey('Andrew’s'), 'andrew-s');
-		expect(Markov.toKey('Andrew’s test!'), 'andrew-s test');
-	});
 	it('should learn phrases exist.', function() {
 		var m = new Markov(2);
 		m.train('This is a test.');

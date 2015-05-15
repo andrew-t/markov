@@ -21,7 +21,7 @@ function Markov(order) {
 					first = false;
 					starters.push(keyShelf.members.join(''))
 				}
-				var key = Markov.toKey(keyShelf.members);
+				var key = toKey(keyShelf.members);
 				chain[key] = new Picker();
 				addToPrev(key, word);
 			});
@@ -36,7 +36,7 @@ function Markov(order) {
 	};
 
 	this.has = function(key) {
-		return !!chain[Markov.toKey(key)];
+		return !!chain[toKey(key)];
 	};
 
 	this.iterate = function(key) {
@@ -53,7 +53,7 @@ function Markov(order) {
 			next: function() {
 				if (force.length)
 					return force.shift();
-				var current = chain[Markov.toKey(shelf.members.filter(function(x) {
+				var current = chain[toKey(shelf.members.filter(function(x) {
 						return x;
 					}))],
 					next = shelf.push(current && current.pick());
@@ -65,7 +65,7 @@ function Markov(order) {
 	Object.defineProperty(this, 'order', { get: function () { return order; } });
 };
 
-Markov.toKey = function toKey(words) {
+function toKey(words) {
 	return (words instanceof Array
 			? words
 			: new Split(words).all())
