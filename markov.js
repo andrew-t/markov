@@ -75,7 +75,7 @@ Markov.prototype.ramble = function(start, maxLength) {
 		var next = iterator.next();
 		if (next) {
 			out += next;
-			if (!/\s["'“‘({\[]$/.test(out))
+			if (!/\s["'“‘({\[$£€]$/.test(out))
 				out += ' ';
 		} else break;
 	}
