@@ -66,6 +66,13 @@ describe('Splitter', function() {
 		expect(s.next(), 'years ');
 		expect(s.next(), 'old.');
 	});
+	it('should handle small numbers.', function() {
+		var s = new Split('I\'m 1.5 years old.');
+		expect(s.next(), 'I\'m ');
+		expect(s.next(), '1.5 ');
+		expect(s.next(), 'years ');
+		expect(s.next(), 'old.');
+	});
 });
 
 function expect(act, exp) {

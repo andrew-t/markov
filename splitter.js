@@ -9,7 +9,7 @@ function Splitter(text) {
 			isNumber;
 		takeWhile(util.isSplitter);
 		takeWhile(function(x) {
-			if (isNumber && (x == ','))
+			if (isNumber && /[.,]/.test(x))
 				return true;
 			if (isNumber == undefined)
 				isNumber = /\d/.test(x);
