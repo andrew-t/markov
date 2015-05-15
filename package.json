@@ -1,0 +1,30 @@
+{
+    "name" : "markov",
+    "description" : "Silly markov chatbot module",
+    "version" : "0.0.7",
+    "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/andrew-t/markov.git"
+    },
+    "main" : "./markov.js",
+    "directories" : {
+        "lib" : "."
+    },
+    "scripts" : {
+        "test": "mocha"
+    },
+    "engines" : {
+        "node" : ">=0.10.0"
+    },
+    "dependencies" : {
+        "deck" : ">=0.0.3"
+    },
+    "devDependencies" : {
+        "mocha": ">=2.0.0"
+    },
+    "author" : {
+        "name" : "Andrew Taylor",
+        "email" : "markov@andrewt.net",
+        "url" : "http://www.andrewt.net"
+    }
+}
