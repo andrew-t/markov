@@ -6,18 +6,38 @@ function Splitter(text) {
 		if (i >= text.length)
 			return null;
 		var out = '';
-		while (!util.isSplitter(text[i]))
-			out += text[i++];
-		while (util.isSplitter(text[i])) {
-			out += text[i++];
-			if (i >= text.length)
-				break;
-		}
+		takeWhile(util.isSplitter);
+		takeWhile(not(util.isSplitter));
+		takeWhile(util.isSplitter);
 		return out || null;
+
+		function takeWhile(c) {
+			while (i < text.length && c(text[i]))
+				out += text[i++];
+		}
 	};
 	this.skip = function(n) {
 		while (n--) this.next();
 	};
+	this.reset = function() {
+		i = 0;
+	};
+	this.all = function() {
+		var oldI = i,
+			out = [],
+			next;
+		i = 0;
+		while (next = this.next())
+			out.push(next);
+		i = oldI;
+		return out;
+	}
+}
+
+function not(c) {
+	return function(x) {
+		return !c(x);
+	}
 }
 
 module.exports = Splitter;
