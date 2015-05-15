@@ -1,4 +1,4 @@
-var isLetter = require('./is-letter');
+var util = require('./util');
 
 function Splitter(text) {
 	var i = 0;
@@ -6,11 +6,13 @@ function Splitter(text) {
 		if (i >= text.length)
 			return null;
 		var out = '';
-		while (!isLetter(text[i]))
-			if (++i >= text.length)
-				return null;
-		while (isLetter(text[i]))
+		while (!util.isSplitter(text[i]))
 			out += text[i++];
+		while (util.isSplitter(text[i])) {
+			out += text[i++];
+			if (i >= text.length)
+				break;
+		}
 		return out || null;
 	};
 	this.skip = function(n) {
