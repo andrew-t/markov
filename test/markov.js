@@ -23,6 +23,13 @@ describe('Markov', function() {
 		expect(i.next(), 'test.');
 		expect(i.next(), undefined);
 	});
+	it('should handle big numbers.', function() {
+		var m = new Markov(1);
+		m.train('I am 1,000 years old.');
+		demand(m.has('1,000'), 'Missing 1000');
+		demand(!m.has('1'), 'Too much 1');
+		demand(!m.has('000'), 'Too much 000');
+	});
 	it('should ramble.', function() {
 		var m = new Markov(1);
 		m.train('This is a test.');

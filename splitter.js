@@ -5,9 +5,16 @@ function Splitter(text) {
 	this.next = function() {
 		if (i >= text.length)
 			return null;
-		var out = '';
+		var out = '',
+			isNumber;
 		takeWhile(util.isSplitter);
-		takeWhile(not(util.isSplitter));
+		takeWhile(function(x) {
+			if (isNumber && (x == ','))
+				return true;
+			if (isNumber == undefined)
+				isNumber = /\d/.test(x);
+			return !util.isSplitter(x);
+		});
 		takeWhile(util.isSplitter);
 		return out || null;
 
@@ -40,12 +47,6 @@ function Splitter(text) {
 		while (next = this.next())
 			c(next, n++);
 	};
-}
-
-function not(c) {
-	return function(x) {
-		return !c(x);
-	}
 }
 
 module.exports = Splitter;

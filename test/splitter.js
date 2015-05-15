@@ -59,6 +59,13 @@ describe('Splitter', function() {
 		});
 		expect(all, t);
 	});
+	it('should handle big numbers.', function() {
+		var s = new Split('I\'m 1,000 years old.');
+		expect(s.next(), 'I\'m ');
+		expect(s.next(), '1,000 ');
+		expect(s.next(), 'years ');
+		expect(s.next(), 'old.');
+	});
 });
 
 function expect(act, exp) {
