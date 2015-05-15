@@ -73,11 +73,11 @@ Markov.prototype.ramble = function(start, maxLength) {
 		maxLength = Infinity;
 	while (--maxLength) {
 		var next = iterator.next();
-		if (next)
+		if (next) {
 			out += next;
-		if (!/\s"$/.test(out))
-			out += ' ';
-		else break;
+			if (!/\s"$/.test(out))
+				out += ' ';
+		} else break;
 	}
 	return out.trim();
 };
