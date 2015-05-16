@@ -2,6 +2,7 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 	var Markov = require('./markov'),
 		order,
 		chains = [],
+		m,
 		$ = document.getElementById.bind(document);
 
 	$('define').addEventListener('click', function() {
@@ -36,7 +37,9 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 		ramble();
 	});
 	function ramble() {
-		$('output').value = Markov.combine(chains).ramble(
+		if (!m)
+			m = Markov.combine(chains);
+		$('output').value = m.ramble(
 			$('output').value || undefined,
 			$('forever').checked
 				? undefined
@@ -61,6 +64,7 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 		console.log(chains)
 		$('chains').innerHTML = '';
 		chains.forEach(tr);
+		m = null;
 	}
 
 	function tr(markov, i) {
@@ -69,6 +73,8 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 			total = 0;
 		for (var key in markov.links)
 			if (markov.links.hasOwnProperty(key) &&
+				// This line is needed because Firefox of all people
+				// seems to inject a 'watch' function that gets caught in this:
 				!isNaN(markov.links[key].totalCount))
 				total += markov.links[key].totalCount;
 		if (!tr) {
