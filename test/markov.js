@@ -49,6 +49,35 @@ describe('Markov', function() {
 		ish(data.count('1 2 3 4'), 500, 50);
 		ish(data.count('1 2 3 5 6'), 250, 50);
 	});
+	describe('combinations', function() {
+		var m = new Markov(1);
+		m.train('1 2');
+		var n = new Markov(1);
+		n.train('3 4');
+		it('should work', function() {
+			var x = Markov.combine([{
+					chain: m,
+					weight: 1
+				}, {
+					chain: n,
+					weight: 2
+				}]);
+			expect(x.order, 1);
+			expect(x.ramble('1'), '1 2');
+			expect(x.ramble('3'), '3 4');
+		});
+		it('should be weighted', function() {
+			var x = Markov.combine([{
+					chain: m,
+					weight: 1000
+				}, {
+					chain: n,
+					weight: 0
+				}]);
+			for (var i = 0; i < 100; ++i)
+				expect(x.ramble(), '1 2');
+		});
+	});
 });
 
 function ish(act, exp, delta) {

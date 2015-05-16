@@ -2,9 +2,12 @@ function Picker() {
 	this.totalCount = 0;
 	this.members = {};
 }
-Picker.prototype.push = function(key) {
-	++this.totalCount;
-	this.members[key] = this.count(key) + 1;
+Picker.prototype.push = function(key, weight) {
+	if (weight == undefined)
+		weight = 1;
+	this.totalCount += weight;
+	this.members[key] = this.count(key) + weight;
+	return this;
 };
 Picker.prototype.pick = function() {
 	var n = Math.random() * this.totalCount;
@@ -15,6 +18,24 @@ Picker.prototype.pick = function() {
 };
 Picker.prototype.count = function(key) {
 	return this.members[key] || 0;
+};
+Picker.prototype.inject = function(donor, weight) {
+	if (weight == undefined)
+		weight = 1;
+	for (var key in donor.members)
+		this.push(key, donor.members[key] * weight);
+	return this;
+};
+Picker.prototype.multiply = function(weight) {
+	for (var key in this.members)
+		this.members[key] *= weight;
+	return this;
+};
+Picker.prototype.clone = function() {
+	var clone = new Picker();
+	for (var key in this.members)
+		clone.push(key, this.members[key]);
+	return clone;
 };
 
 module.exports = Picker;

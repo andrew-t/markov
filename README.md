@@ -1,7 +1,20 @@
 # markov
-It was high time I wrote my own Markov chain implementation, so here it is.
+It was high time I wrote my own Markov chain implementation, so here it is. It's designed for use in [@fishexist](https://github.com/andrew-t/fish) but Markov chains are great fun, so doubtless I'll use it again.
 
-It's designed for use in [@fishexist](https://github.com/andrew-t/fish) but Markov chains are great fun, so doubtless I'll use it again. Here is the usage mixed in with a brief explanation of how to use it:
+## Playing
+
+If you just want to play with Markov chains, go to [the web UI](http://github.andrewt.net/markov).
+
+1. Pick an order — a small number will result in a less coherent ramble, but a large number might just output exactly the training text, so find a balance.
+2. Enter some training text, and press train. You can enter as much at a time as you like, and as many lines as you like.
+3. Optionally enter some text for the ramble to start with. At least the last few words of this text must appear in the training text or else the ramble will be unable to start.
+4. Choose a maximum length (or for the ramble to go on 'forever' which really just means until it reaches a natural stopping point).
+5. Press 'ramble' and see what you get.
+6. Delete the ramble before generating a new one, or else the new one will 'start with' the old one and probably not contain anything else.
+
+## Coding
+
+Here is the usage mixed in with a brief explanation of how to use it:
 
     var Markov = require('./markov'),
         m = new Markov(2);

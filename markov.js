@@ -4,7 +4,7 @@ var util = require('./util'),
 	Shelf = require('./shelf'),
 	noWord = '!';
 
-function Markov(order) {
+function Markov(order, starters, chain) {
 	if (!order)
 		order = 2;
 	var starters = new Picker(),
@@ -28,6 +28,7 @@ function Markov(order) {
 			addToPrev(key, word);
 		});
 		addToPrev();
+		return this;
 
 		function addToPrev(key, word) {
 			var prev = prevShelf.push(key);
@@ -64,6 +65,28 @@ function Markov(order) {
 	};
 
 	Object.defineProperty(this, 'order', { get: function () { return order; } });
+	Object.defineProperty(this, 'starters', {
+		get: function () {
+			return starters.clone();
+		}
+	});
+	Object.defineProperty(this, 'chain', {
+		get: function () {
+			var clone = {};
+			for (var key in chain)
+				clone[key] = chain[key].clone();
+			return clone;
+		}
+	});
+
+	this.inject = function(donor, weight) {
+		starters.inject(donor.starters, weight);
+		for (var key in donor.chain)
+			if (chain[key])
+				chain[key].inject(donor.chain[key], weight);
+			else
+				chain[key] = donor.chain[key].multiply(weight);
+	};
 };
 
 Markov.prototype.ramble = function(start, maxLength) {
@@ -80,6 +103,14 @@ Markov.prototype.ramble = function(start, maxLength) {
 		} else break;
 	}
 	return out.trim();
+};
+
+Markov.combine = function(els) {
+	var m = new Markov(els[0].chain.order);
+	els.forEach(function(el) {
+		m.inject(el.chain, el.weight);
+	});
+	return m;
 };
 
 function toKey(words) {
