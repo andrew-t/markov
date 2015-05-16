@@ -1,0 +1,36 @@
+---
+---
+
+body {
+	font-size: 1em;
+	background: #ddd;
+	> section {
+		> div {
+			background: white;
+			box-shadow: 0 .1em 1em black;
+			padding: 1em;
+			margin: 1em;
+		}
+	}
+}
+
+input, button, textarea {
+	font-size: inherit;
+	&[type=number] {
+		width: 4em;
+	}
+}
+
+.hidden {
+	display: none;
+}
+
+textarea {
+	background: #eee;
+	box-shadow: 0 .1em 1em #888 inset;
+	width: calc(100% - 1em);
+	border: none;
+	padding: .5em;
+	height: 5em;
+	font-family: sans-serif;
+}
