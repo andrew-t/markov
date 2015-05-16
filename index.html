@@ -15,6 +15,14 @@
     	<section id="2" class="hidden">
     		<div>
 	    		<textarea id="corpus"></textarea>
+                <div>
+                    <label for="split">Split</label>
+                    <select id="split">
+                        <option value="\n">on new lines</option>
+                        <option value="\n\s*\n">on blank lines</option>
+                        <option value="^$">never</option>
+                    </select>
+                </div>
 	    		<button id="train">Train</button>
 	    	</div>
 

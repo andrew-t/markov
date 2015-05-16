@@ -13,7 +13,7 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 
 	$('train').addEventListener('click', function() {
 		$('corpus').value
-			.split('\n')
+			.split(new RegExp($('split').value, 'g'))
 			.filter(function(x) { return x.trim(); })
 			.forEach(m.train.bind(m));
 		$('corpus').value = '';
