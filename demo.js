@@ -68,9 +68,9 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 			tr = $(id),
 			total = 0;
 		for (var key in markov.links)
-			if (!markov.links[key].totalCount++)
-				console.log(key)
-			//total += markov.links[key].totalCount;
+			if (markov.links.hasOwnProperty(key) &&
+				!isNaN(markov.links[key].totalCount))
+				total += markov.links[key].totalCount;
 		if (!tr) {
 			var tr = el($('chains'), 'tr', null, { id: id })
 			el(tr, 'td', markov.chain.ramble(null, Math.max(8, order)));
