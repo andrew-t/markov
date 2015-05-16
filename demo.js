@@ -13,19 +13,20 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 	});
 
 	$('train').addEventListener('click', function() {
-		var m = new Markov(order);
-		chains.push({
-			chain: m,
+		var m = {
+			chain: new Markov(order),
 			weight: 1
-		});
+		};
+		chains.push(m);
 		$('corpus').value
 			.split(new RegExp($('split').value, 'g'))
 			.filter(function(x) { return x.trim(); })
-			.forEach(m.train.bind(m));
+			.forEach(m.chain.train.bind(m.chain));
 		$('corpus').value = '';
 		$('3').classList.remove('hidden');
 		$('4').classList.remove('hidden');
-		
+		m.starters = m.chain.starters;
+		m.links = m.chain.chain;
 		list();
 	});
 
@@ -57,6 +58,7 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 	});
 
 	function list() {
+		console.log(chains)
 		$('chains').innerHTML = '';
 		chains.forEach(tr);
 	}
@@ -64,15 +66,15 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 	function tr(markov, i) {
 		var id = 'chain-' + i,
 			tr = $(id),
-			wStarters,
-			wChain,
 			total = 0;
-		for (var key in markov.chain.chain)
-			total += markov.chain.chain[key].totalCount;;
+		for (var key in markov.links)
+			if (!markov.links[key].totalCount++)
+				console.log(key)
+			//total += markov.links[key].totalCount;
 		if (!tr) {
 			var tr = el($('chains'), 'tr', null, { id: id })
 			el(tr, 'td', markov.chain.ramble(null, Math.max(8, order)));
-			el(tr, 'td', markov.chain.starters.totalCount);
+			el(tr, 'td', markov.starters.totalCount);
 			el(tr, 'td', total);
 			el(el(tr, 'td'), 'input', null, {
 				type: 'number',
@@ -85,7 +87,7 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 			el(tr, 'td', null, { id: id + '-ws' });
 			el(tr, 'td', null, { id: id + '-wc' });
 		}
-		$(id + '-ws').innerHTML = markov.chain.starters.totalCount * markov.weight
+		$(id + '-ws').innerHTML = markov.starters.totalCount * markov.weight
 		$(id + '-wc').innerHTML = total * markov.weight
 		return tr;
 	}
