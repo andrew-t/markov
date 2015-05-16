@@ -8,12 +8,20 @@
     </head>
     <body>
     	<section id="1">
-    		<label for="order">Order</label>
-    		<input type="number" id="order" value="2" min="1">
-    		<button id="define">Start</button>
+            <div>
+                <p>
+                    Before we start, we need to choose an order. This is the number of words that are taken into account when choosing the next one. Effectively, a larger number produces a more coherent ramble, but might just end up repeating the training text. Usually stick with 2 unless you're adding a very long training text, in which case try turining it up.
+                </p>
+        		<label for="order">Order</label>
+        		<input type="number" id="order" value="2" min="1">
+        		<button id="define">Start</button>
+            </div>
     	</section>
     	<section id="2" class="hidden">
     		<div>
+                <p>
+                    Next, you need to enter some text on which to train the Markov chain. You can do this as many times as you like.
+                </p>
 	    		<textarea id="corpus"></textarea>
                 <div>
                     <label for="split">Split</label>
@@ -27,6 +35,9 @@
 	    	</div>
 
 	    	<div id="3" class="hidden">
+                <p>
+                    Lastly, generate some text. If you enter text, it will be used as a starting point — but only if the last few words appear in the training text.
+                </p>
 	    		<textarea id="output"></textarea>
 	    		<div>
 	    			<label for="forever">Forever</label>
