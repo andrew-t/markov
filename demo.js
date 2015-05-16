@@ -12,18 +12,26 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 	});
 
 	$('train').addEventListener('click', function() {
-		m.train($('corpus').value);
+		$('corpus').value
+			.split('\n')
+			.filter(function(x) { return x.trim(); })
+			.forEach(m.train.bind(m));
 		$('corpus').value = '';
 		$('3').classList.remove('hidden');
 	});
 
-	$('ramble').addEventListener('click', function() {
+	$('ramble').addEventListener('click', ramble);
+	$('reramble').addEventListener('click', function() {
+		$('output').value = '';
+		ramble();
+	});
+	function ramble() {
 		$('output').value = m.ramble(
 			$('output').value || undefined,
 			$('forever').checked
 				? undefined
 				: $('length').value);
-	});
+	}
 
 	$('forever').addEventListener('change', ldiv);
 	ldiv();
