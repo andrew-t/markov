@@ -126,9 +126,11 @@ function toKey(words) {
 					return !util.isSplitter(c);
 				})
 				.map(function(c) {
-					return util.isLetter(c) ? c : '-';
+					return util.isLetter(c) ? c : ' ';
 				})
-				.join('');
+				.join('')
+				.trim()
+				.replace(/\s/, '-');
 		})
 		.join(' ');
 }

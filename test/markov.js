@@ -13,6 +13,11 @@ describe('Markov', function() {
 		demand(m.has('is a'));
 		demand(m.has('a test.'));
 	});
+	it('should ignore punctuation.', function() {
+		var m = new Markov(2);
+		m.train('Wow, it\'s a test.');
+		demand(m.has('Wow it\'s'));
+	});
 	it('should start to iterate.', function() {
 		var m = new Markov(2);
 		m.train('This is a test.');
