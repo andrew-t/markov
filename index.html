@@ -18,11 +18,11 @@
             </div>
     	</section>
     	<section id="2" class="hidden">
-    		<div>
+            <div>
                 <p>
                     Next, you need to enter some text on which to train the Markov chain. You can do this as many times as you like.
                 </p>
-	    		<textarea id="corpus"></textarea>
+                <textarea id="corpus"></textarea>
                 <div>
                     <label for="split">Split</label>
                     <select id="split">
@@ -31,10 +31,29 @@
                         <option value="^$">never</option>
                     </select>
                 </div>
-	    		<button id="train">Train</button>
-	    	</div>
+                <button id="train">Train</button>
+            </div>
 
-	    	<div id="3" class="hidden">
+            <div id="3" class="hidden">
+                <p>
+                    Optionally, you can adjust the weightings of your source material.
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Chain</th>
+                            <th>Training lines</th>
+                            <th>Connections</th>
+                            <th>Weight</th>
+                            <th>Weighted Training lines</th>
+                            <th>Weighted Connections</th>
+                        </tr>
+                    </thead>
+                    <tbody id="chains"></tbody>
+                </table>
+            </div>
+
+	    	<div id="4" class="hidden">
                 <p>
                     Lastly, generate some text. If you enter text, it will be used as a starting point — but only if the last few words appear in the training text.
                 </p>
