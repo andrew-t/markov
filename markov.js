@@ -74,7 +74,8 @@ function Markov(order, starters, chain) {
 		get: function () {
 			var clone = {};
 			for (var key in chain)
-				clone[key] = chain[key].clone();
+				if (chain.hasOwnProperty(key))
+					clone[key] = chain[key].clone();
 			return clone;
 		}
 	});

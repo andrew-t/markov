@@ -34,7 +34,8 @@ Picker.prototype.multiply = function(weight) {
 Picker.prototype.clone = function() {
 	var clone = new Picker();
 	for (var key in this.members)
-		clone.push(key, this.members[key]);
+		if (this.members.hasOwnProperty(key))
+			clone.push(key, this.members[key]);
 	return clone;
 };
 
