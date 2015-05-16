@@ -12,8 +12,9 @@ Picker.prototype.push = function(key, weight) {
 Picker.prototype.pick = function() {
 	var n = Math.random() * this.totalCount;
 	for (var key in this.members)
-		if ((n -= this.members[key]) < 0)
-			return key;
+		if (this.members.hasOwnProperty(key) &&
+			((n -= this.members[key]) < 0))
+				return key;
 	throw 'No member found.';
 };
 Picker.prototype.count = function(key) {
@@ -23,12 +24,14 @@ Picker.prototype.inject = function(donor, weight) {
 	if (weight == undefined)
 		weight = 1;
 	for (var key in donor.members)
-		this.push(key, donor.members[key] * weight);
+		if (this.members.hasOwnProperty(key))
+			this.push(key, donor.members[key] * weight);
 	return this;
 };
 Picker.prototype.multiply = function(weight) {
 	for (var key in this.members)
-		this.members[key] *= weight;
+		if (this.members.hasOwnProperty(key))
+			this.members[key] *= weight;
 	return this;
 };
 Picker.prototype.clone = function() {
