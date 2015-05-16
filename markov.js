@@ -81,11 +81,12 @@ function Markov(order, starters, chain) {
 
 	this.inject = function(donor, weight) {
 		starters.inject(donor.starters, weight);
-		for (var key in donor.chain)
+		var c = donor.chain;
+		for (var key in c)
 			if (chain[key])
-				chain[key].inject(donor.chain[key], weight);
+				chain[key].inject(c[key], weight);
 			else
-				chain[key] = donor.chain[key].multiply(weight);
+				chain[key] = c[key].multiply(weight);
 	};
 };
 
