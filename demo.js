@@ -18,17 +18,21 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 			chain: new Markov(order),
 			weight: 1
 		};
-		chains.push(m);
 		$('corpus').value
 			.split(new RegExp($('split').value, 'g'))
 			.filter(function(x) { return x.trim(); })
 			.forEach(m.chain.train.bind(m.chain));
-		$('corpus').value = '';
-		$('3').classList.remove('hidden');
-		$('4').classList.remove('hidden');
-		m.starters = m.chain.starters;
-		m.links = m.chain.chain;
-		list();
+		if (m.chain.starters.totalCount == 0)
+			alert('No training data found.');
+		else {
+		chains.push(m);
+			$('corpus').value = '';
+			$('3').classList.remove('hidden');
+			$('4').classList.remove('hidden');
+			m.starters = m.chain.starters;
+			m.links = m.chain.chain;
+			list();
+		}
 	});
 
 	$('ramble').addEventListener('click', ramble);
@@ -37,8 +41,11 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 		ramble();
 	});
 	function ramble() {
+		var c = chains.filter(function(chain) {
+			return chain.weight > 0;
+		});
 		if (!m)
-			m = Markov.combine(chains);
+			m = c.length > 1 ? Markov.combine(c) : c[0].chain;
 		$('output').value = m.ramble(
 			$('output').value || undefined,
 			$('forever').checked
@@ -61,7 +68,6 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 	});
 
 	function list() {
-		console.log(chains)
 		$('chains').innerHTML = '';
 		chains.forEach(tr);
 		m = null;
@@ -72,10 +78,10 @@ preload(['./markov', './picker', './shelf', './util', './splitter'], function() 
 			tr = $(id),
 			total = 0;
 		for (var key in markov.links)
-			if (markov.links.hasOwnProperty(key) &&
+			if (markov.links.hasOwnProperty(key)) // &&
 				// This line is needed because Firefox of all people
 				// seems to inject a 'watch' function that gets caught in this:
-				!isNaN(markov.links[key].totalCount))
+				//!isNaN(markov.links[key].totalCount))
 				total += markov.links[key].totalCount;
 		if (!tr) {
 			var tr = el($('chains'), 'tr', null, { id: id })
