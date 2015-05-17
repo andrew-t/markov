@@ -38,7 +38,7 @@ function Markov(order, starters, chain) {
 	};
 
 	this.has = function(key) {
-		return !!chain[toKey(key)];
+		return chain.hasOwnProperty(toKey(key));
 	};
 
 	this.iterate = function(key) {
@@ -84,7 +84,7 @@ function Markov(order, starters, chain) {
 		starters.inject(donor.starters, weight);
 		var c = donor.chain;
 		for (var key in c)
-			if (chain[key])
+			if (chain.hasOwnProperty(key))
 				chain[key].inject(c[key], weight);
 			else
 				chain[key] = c[key].multiply(weight);
