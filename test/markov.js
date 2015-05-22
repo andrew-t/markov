@@ -28,6 +28,23 @@ describe('Markov', function() {
 		expect(i.next(), 'test.');
 		expect(i.next(), undefined);
 	});
+	it('should extend phrases.', function() {
+		var m = new Markov(2);
+		m.train('This is a test.');
+		m.train('This is a bigger test.');
+		m.train('This is a test with bells on.');
+		expect(m.extend('This is'), 'This is a');
+	});
+	it('should display options.', function() {
+		var m = new Markov(2);
+		m.train('This is a test.');
+		m.train('This is a bigger test.');
+		m.train('This is a test with bells on.');
+		var i = m.iterate();
+		want(i.options(), ['This is a']);
+		want(i.options(0), ['test.', 'bigger test.']);
+		want(i.options(1), [null, 'with bells on.']);
+	});
 	it('should handle big numbers.', function() {
 		var m = new Markov(1);
 		m.train('I am 1,000 years old.');
@@ -98,4 +115,11 @@ function demand(tr, msg) {
 function expect(act, exp) {
 	if (act !== exp)
 		throw 'Expected ' + exp + ' but got ' + act;
+}
+
+function want(act, exp) {
+	expect(act.length, exp.length);
+	act.forEach(function(act, i) {
+		expect(act, exp[i]);
+	})
 }

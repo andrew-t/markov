@@ -8,7 +8,8 @@ function Markov(order, starters, chain) {
 	if (!order)
 		order = 2;
 	var starters = new Picker(),
-		chain = {};
+		chain = {},
+		markov = this;
 	this.train = function(text) {
 		var split = new Split(text),
 			first = true,
@@ -41,11 +42,24 @@ function Markov(order, starters, chain) {
 		return chain.hasOwnProperty(toKey(key));
 	};
 
+	this.start = function() {
+		return this.extend(starters.pick());
+	};
+
+	this.extend = function(key) {
+		var link,
+			data = this.key(key);
+		while ((link = chain[this.key(data.key)]) && link.length == 1)
+			data.force.push(data.key.push(Object.keys(link.members)[0]));
+		return Markov.join(data.force.concat(data.key.members));
+	};
+
 	this.iterate = function(key) {
 		if (!key)
-			key = starters.pick();
+			key = markov.start();
 		var shelf = new Shelf(order),
-			force = [];
+			force = [],
+			options;
 		new Split(key).each(function(word) {
 			var f = shelf.push(word.trim());
 			if (f)
@@ -55,13 +69,15 @@ function Markov(order, starters, chain) {
 			next: function() {
 				if (force.length)
 					return force.shift();
-				var current = chain[toKey(shelf.members.filter(function(x) {
-						return x;
-					}))],
+				var current = nextLink(),
 					next = shelf.push(current && current.pick());
 				return next == noWord ? undefined : next;
 			}
 		};
+
+		function nextLink() {
+			return chain[markov.key(shelf)];
+		}
 	};
 
 	Object.defineProperty(this, 'order', { get: function () { return order; } });
@@ -92,20 +108,28 @@ function Markov(order, starters, chain) {
 };
 
 Markov.prototype.ramble = function(start, maxLength) {
-	var out = '',
+	var out = [],
 		iterator = this.iterate(start);
 	if (!maxLength)
 		maxLength = Infinity;
 	while (--maxLength) {
 		var next = iterator.next();
-		if (next) {
-			out += next;
-			if (!/\s["'“‘({\[]$/.test(out))
-				out += ' ';
-		} else break;
+		if (next)
+			out.push(next);
+		else break;
 	}
-	return out.trim();
+	return Markov.join(out);
 };
+
+Markov.join = function(words) {
+	var out = '';
+	words.forEach(function(next) {
+		out += next;
+		if (!/\s["'“‘({\[]$/.test(out))
+			out += ' ';
+	});
+	return out.trim();
+}
 
 Markov.combine = function(els) {
 	var m = new Markov(els[0].chain.order);
@@ -113,6 +137,24 @@ Markov.combine = function(els) {
 		m.inject(el.chain, el.weight);
 	});
 	return m;
+};
+
+Markov.prototype.key = function(phrase) {
+	if (phrase instanceof Shelf)
+		return toKey(phrase.members.filter(function(x) {
+			return x;
+		}))
+	var shelf = new Shelf(this.order),
+		force = [];
+	new Split(phrase).each(function(word) {
+		var f = shelf.push(word.trim());
+		if (f)
+			force.push(f.trim());
+	});
+	return {
+		force: force,
+		key: shelf
+	}
 };
 
 function toKey(words) {

@@ -42,5 +42,8 @@ Picker.prototype.clone = function() {
 			clone.push(key, this.count(key));
 	return clone;
 };
+Picker.prototype.options = function() {
+	return Object.keys(this.members);
+};
 
 module.exports = Picker;
