@@ -4,7 +4,7 @@ var util = require('./util'),
 	Shelf = require('./shelf'),
 	noWord = '!';
 
-function Markov(order, starters, chain) {
+function Markov(order) {
 	if (!order)
 		order = 2;
 	var starters = new Picker(),
