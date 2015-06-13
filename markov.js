@@ -58,7 +58,9 @@ function Markov(order) {
 				var current = chain[toKey(shelf.members.filter(function(x) {
 						return x;
 					}))],
-					next = shelf.push(current && current.pick());
+					next = shelf.push(current && current.totalCount > 0
+						? current.pick()
+						: undefined);
 				return next == noWord ? undefined : next;
 			}
 		};

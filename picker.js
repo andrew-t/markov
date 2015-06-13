@@ -15,7 +15,7 @@ Picker.prototype.pick = function() {
 		if (this.members.hasOwnProperty(key) &&
 			((n -= this.count(key)) < 0))
 				return key;
-	throw 'No member found.';
+	throw this.count() > 0 ? 'No member found.' : 'Empty picker.';
 };
 Picker.prototype.count = function(key) {
 	var count = this.members[key];
