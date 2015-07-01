@@ -1,28 +1,31 @@
 {
-    "name" : "markov",
-    "description" : "Markov Chain implementation for being very silly with",
-    "version" : "0.0.1",
-    "repository" : {
-        "type" : "git",
-        "url" : "git://github.com/andrew-t/markov.git"
-    },
-    "main" : "./markov.js",
-    "directories" : {
-        "lib" : "."
-    },
-    "scripts" : {
-        "test": "mocha"
-    },
-    "engines" : {
-        "node" : ">=0.10.0"
-    },
-    "dependencies" : { },
-    "devDependencies" : {
-        "mocha": ">=2.0.0"
-    },
-    "author" : {
-        "name" : "Andrew Taylor",
-        "email" : "markov@andrewt.net",
-        "url" : "http://www.andrewt.net"
-    }
+  "name": "markov",
+  "description": "Markov Chain implementation for being very silly with",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andrew-t/markov.git"
+  },
+  "main": "./markov.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "deck": "0.0.4"
+  },
+  "devDependencies": {
+    "mocha": ">=2.0.0"
+  },
+  "author": "Andrew Taylor <markov@andrewt.net> (http://www.andrewt.net)",
+  "bugs": {
+    "url": "https://github.com/andrew-t/markov/issues"
+  },
+  "homepage": "https://github.com/andrew-t/markov",
+  "license": "ISC"
 }
