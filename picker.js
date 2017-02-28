@@ -14,6 +14,8 @@ Picker.prototype.pick = function() {
 	for (var key in this.members)
 		if ((n -= this.members[key]) < 0)
 			return key;
+	console.log('Total count: ' + this.totalCount);
+	console.log(this.members);
 	throw 'No member found.';
 };
 Picker.prototype.count = function(key) {
